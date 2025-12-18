@@ -1,0 +1,29 @@
+@import "tailwindcss";
+
+@theme {
+  --color-rolleat-pink: #d01275;
+  --color-rolleat-red: #e61b31;
+  --color-rolleat-green-light: #95c95d;
+  --color-rolleat-green-dark: #5c994a;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Safe area per iPhone con notch */
+.safe-area-top {
+  padding-top: env(safe-area-inset-top);
+}
+
+.safe-area-bottom {
+  padding-bottom: env(safe-area-inset-bottom);
+}
