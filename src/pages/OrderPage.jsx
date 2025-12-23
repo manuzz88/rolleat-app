@@ -16,6 +16,7 @@ const OrderPage = () => {
   const [wantsInvoice, setWantsInvoice] = useState(false)
   const [status, setStatus] = useState('menu') // menu, paying, confirmed
   const [orderNumber, setOrderNumber] = useState(null)
+  const [showAllergenInfo, setShowAllergenInfo] = useState(false)
 
   // Stato per personalizzazione prodotto
   const [customizingProduct, setCustomizingProduct] = useState(null)
@@ -75,38 +76,38 @@ const OrderPage = () => {
   // Menu prodotti con ingredienti
   const menu = {
     roll: [
-      { id: 'hawaii', name: 'Roll Hawaii', price: 8.90, desc: 'Salmone, avocado, mango', wrap: 'alga-nori', ingredients: ['Salmone', 'Avocado', 'Mango'] },
-      { id: 'tokyo', name: 'Roll Tokyo', price: 9.50, desc: 'Tonno, cetriolo, sesamo', wrap: 'alga-nori', ingredients: ['Tonno', 'Cetriolo', 'Sesamo'] },
-      { id: 'california', name: 'Roll California', price: 8.50, desc: 'Surimi, avocado, cetriolo', wrap: 'alga-nori', ingredients: ['Surimi', 'Avocado', 'Cetriolo'] },
-      { id: 'dragon', name: 'Roll Dragon', price: 10.90, desc: 'Gambero, avocado, salsa teriyaki', wrap: 'soia', ingredients: ['Gambero', 'Avocado', 'Salsa Teriyaki'] },
-      { id: 'veggie', name: 'Roll Veggie', price: 7.90, desc: 'Verdure miste, tofu', wrap: 'soia', ingredients: ['Tofu', 'Carote', 'Cetriolo', 'Avocado'] },
+      { id: 'hawaii', name: 'Roll Hawaii', price: 8.90, desc: 'Salmone, avocado, mango', wrap: 'alga-nori', ingredients: ['Salmone', 'Avocado', 'Mango'], allergens: ['Glutine', 'Pesce', 'Latte', 'Soia', 'Sesamo'] },
+      { id: 'tokyo', name: 'Roll Tokyo', price: 9.50, desc: 'Tonno, cetriolo, sesamo', wrap: 'alga-nori', ingredients: ['Tonno', 'Cetriolo', 'Sesamo'], allergens: ['Glutine', 'Pesce', 'Soia', 'Sesamo'] },
+      { id: 'california', name: 'Roll California', price: 8.50, desc: 'Surimi, avocado, cetriolo', wrap: 'alga-nori', ingredients: ['Surimi', 'Avocado', 'Cetriolo'], allergens: ['Glutine', 'Pesce', 'Crostacei', 'Soia', 'Sesamo'] },
+      { id: 'dragon', name: 'Roll Dragon', price: 10.90, desc: 'Gambero, avocado, salsa teriyaki', wrap: 'soia', ingredients: ['Gambero', 'Avocado', 'Salsa Teriyaki'], allergens: ['Glutine', 'Crostacei', 'Soia', 'Sesamo'] },
+      { id: 'veggie', name: 'Roll Veggie', price: 7.90, desc: 'Verdure miste, tofu', wrap: 'soia', ingredients: ['Tofu', 'Carote', 'Cetriolo', 'Avocado'], allergens: ['Glutine', 'Soia', 'Sesamo'] },
     ],
     bowl: [
-      { id: 'poke-salmon', name: 'Poke Salmone', price: 12.90, desc: 'Salmone, riso, edamame, avocado', ingredients: ['Salmone', 'Riso', 'Edamame', 'Avocado', 'Cipolla Rossa', 'Sesamo'] },
-      { id: 'poke-tuna', name: 'Poke Tonno', price: 13.90, desc: 'Tonno, riso, mango, cipolla', ingredients: ['Tonno', 'Riso', 'Mango', 'Cipolla Rossa', 'Salsa Soia'] },
-      { id: 'buddha', name: 'Buddha Bowl', price: 11.90, desc: 'Quinoa, verdure, hummus', ingredients: ['Quinoa', 'Ceci', 'Hummus', 'Pomodorini', 'Cetriolo', 'Carote'] },
+      { id: 'poke-salmon', name: 'Poke Salmone', price: 12.90, desc: 'Salmone, riso, edamame, avocado', ingredients: ['Salmone', 'Riso', 'Edamame', 'Avocado', 'Cipolla Rossa', 'Sesamo'], allergens: ['Glutine', 'Pesce', 'Soia', 'Sesamo'] },
+      { id: 'poke-tuna', name: 'Poke Tonno', price: 13.90, desc: 'Tonno, riso, mango, cipolla', ingredients: ['Tonno', 'Riso', 'Mango', 'Cipolla Rossa', 'Salsa Soia'], allergens: ['Glutine', 'Pesce', 'Soia', 'Sesamo'] },
+      { id: 'buddha', name: 'Buddha Bowl', price: 11.90, desc: 'Quinoa, verdure, hummus', ingredients: ['Quinoa', 'Ceci', 'Hummus', 'Pomodorini', 'Cetriolo', 'Carote'], allergens: ['Sesamo'] },
     ],
     insalate: [
-      { id: 'in-grecia', name: 'Insalata In Grecia', price: 10.90, desc: 'Pomodorini, Feta, Olive, Cetrioli, Cipolla', ingredients: ['Pomodorini', 'Feta', 'Olive Taggiasche', 'Cetrioli', 'Cipolla di Tropea', 'Olio d\'oliva'] },
-      { id: 'veggy-nuggets', name: 'Veggy Nuggets & Co', price: 10.90, desc: 'Veggy nuggets, Edamame, Olive, Carote', ingredients: ['Veggy Nuggets', 'Edamame', 'Olive Taggiasche', 'Carote', 'Salsa Teriyaki'] },
-      { id: 'mediterranea', name: 'Insalata Mediterranea', price: 10.90, desc: 'Uova, Mozzarelline, Pomodorini, Olive', ingredients: ['Uova Bollite', 'Mozzarelline', 'Pomodorini', 'Olive Taggiasche', 'Olio d\'oliva'] },
-      { id: 'caesar', name: 'Caesar Salad', price: 10.90, desc: 'Pollo teriyaki, Feta, Pomodori secchi', ingredients: ['Pollo Teriyaki & Zenzero', 'Feta', 'Pomodori Secchi', 'Olive Taggiasche', 'Salsa Caesar'] },
+      { id: 'in-grecia', name: 'Insalata In Grecia', price: 10.90, desc: 'Pomodorini, Feta, Olive, Cetrioli, Cipolla', ingredients: ['Pomodorini', 'Feta', 'Olive Taggiasche', 'Cetrioli', 'Cipolla di Tropea', 'Olio d\'oliva'], allergens: ['Latte'] },
+      { id: 'veggy-nuggets', name: 'Veggy Nuggets & Co', price: 10.90, desc: 'Veggy nuggets, Edamame, Olive, Carote', ingredients: ['Veggy Nuggets', 'Edamame', 'Olive Taggiasche', 'Carote', 'Salsa Teriyaki'], allergens: ['Glutine', 'Soia'] },
+      { id: 'mediterranea', name: 'Insalata Mediterranea', price: 10.90, desc: 'Uova, Mozzarelline, Pomodorini, Olive', ingredients: ['Uova Bollite', 'Mozzarelline', 'Pomodorini', 'Olive Taggiasche', 'Olio d\'oliva'], allergens: ['Uova', 'Latte'] },
+      { id: 'caesar', name: 'Caesar Salad', price: 10.90, desc: 'Pollo teriyaki, Feta, Pomodori secchi', ingredients: ['Pollo Teriyaki & Zenzero', 'Feta', 'Pomodori Secchi', 'Olive Taggiasche', 'Salsa Caesar'], allergens: ['Glutine', 'Uova', 'Latte', 'Pesce'] },
     ],
     snack: [
-      { id: 'edamame', name: 'Edamame', price: 4.50, desc: 'Con sale marino', ingredients: ['Edamame', 'Sale Marino'] },
-      { id: 'gyoza', name: 'Gyoza (5pz)', price: 6.90, desc: 'Ravioli giapponesi', ingredients: ['Maiale', 'Verdure', 'Pasta Gyoza'] },
+      { id: 'edamame', name: 'Edamame', price: 4.50, desc: 'Con sale marino', ingredients: ['Edamame', 'Sale Marino'], allergens: ['Soia'] },
+      { id: 'gyoza', name: 'Gyoza (5pz)', price: 6.90, desc: 'Ravioli giapponesi', ingredients: ['Maiale', 'Verdure', 'Pasta Gyoza'], allergens: ['Glutine', 'Soia', 'Sesamo'] },
     ],
     dolci: [
-      { id: 'mochi-cioccolato-nocciole', name: 'Mochi Cioccolato e Nocciole', price: 2.80, desc: 'Vegano, senza glutine', ingredients: ['Gelato Cioccolato', 'Nocciole', 'Pasta di Riso'] },
-      { id: 'mochi-cocco', name: 'Mochi Cocco', price: 2.80, desc: 'Senza glutine, vegetariano', ingredients: ['Gelato Cocco', 'Cocco Essiccato', 'Pasta di Riso'] },
-      { id: 'mochi-cioccolato-belga', name: 'Mochi Cioccolato Belga', price: 2.80, desc: 'Vegano, senza glutine', ingredients: ['Gelato Cioccolato Belga', 'Cacao', 'Pasta di Riso'] },
-      { id: 'mochi-fragola-panna', name: 'Mochi Fragola e Panna', price: 2.80, desc: 'Senza glutine', ingredients: ['Gelato Fragola', 'Panna', 'Pasta di Riso'] },
-      { id: 'mochi-mango', name: 'Mochi Mango Alphonso', price: 2.80, desc: 'Senza glutine', ingredients: ['Gelato Mango', 'Pasta di Riso'] },
-      { id: 'mochi-lampone', name: 'Mochi Lampone', price: 2.80, desc: 'Senza glutine', ingredients: ['Gelato Lampone', 'Pasta di Riso'] },
-      { id: 'mochi-pistacchio', name: 'Mochi Pistacchio e Miele', price: 2.80, desc: 'Senza glutine', ingredients: ['Gelato Pistacchio', 'Miele', 'Pasta di Riso'] },
-      { id: 'mochi-vaniglia', name: 'Mochi Vaniglia', price: 2.80, desc: 'Senza glutine, vegetariano', ingredients: ['Gelato Vaniglia', 'Pasta di Riso'] },
-      { id: 'mochi-passion-mango', name: 'Mochi Passion e Mango', price: 2.80, desc: 'Senza glutine', ingredients: ['Gelato Passion', 'Gelato Mango', 'Pasta di Riso'] },
-      { id: '5-mochi', name: '5 Mochi a Scelta', price: 15.50, desc: 'Gusti assortiti', ingredients: [] },
+      { id: 'mochi-cioccolato-nocciole', name: 'Mochi Cioccolato e Nocciole', price: 2.80, desc: 'Vegano, senza glutine', ingredients: ['Gelato Cioccolato', 'Nocciole', 'Pasta di Riso'], allergens: ['Frutta a guscio', 'Soia'] },
+      { id: 'mochi-cocco', name: 'Mochi Cocco', price: 2.80, desc: 'Senza glutine, vegetariano', ingredients: ['Gelato Cocco', 'Cocco Essiccato', 'Pasta di Riso'], allergens: ['Latte'] },
+      { id: 'mochi-cioccolato-belga', name: 'Mochi Cioccolato Belga', price: 2.80, desc: 'Vegano, senza glutine', ingredients: ['Gelato Cioccolato Belga', 'Cacao', 'Pasta di Riso'], allergens: ['Soia'] },
+      { id: 'mochi-fragola-panna', name: 'Mochi Fragola e Panna', price: 2.80, desc: 'Senza glutine', ingredients: ['Gelato Fragola', 'Panna', 'Pasta di Riso'], allergens: ['Latte'] },
+      { id: 'mochi-mango', name: 'Mochi Mango Alphonso', price: 2.80, desc: 'Senza glutine', ingredients: ['Gelato Mango', 'Pasta di Riso'], allergens: ['Latte'] },
+      { id: 'mochi-lampone', name: 'Mochi Lampone', price: 2.80, desc: 'Senza glutine', ingredients: ['Gelato Lampone', 'Pasta di Riso'], allergens: [] },
+      { id: 'mochi-pistacchio', name: 'Mochi Pistacchio e Miele', price: 2.80, desc: 'Senza glutine', ingredients: ['Gelato Pistacchio', 'Miele', 'Pasta di Riso'], allergens: ['Latte', 'Frutta a guscio'] },
+      { id: 'mochi-vaniglia', name: 'Mochi Vaniglia', price: 2.80, desc: 'Senza glutine, vegetariano', ingredients: ['Gelato Vaniglia', 'Pasta di Riso'], allergens: ['Latte'] },
+      { id: 'mochi-passion-mango', name: 'Mochi Passion e Mango', price: 2.80, desc: 'Senza glutine', ingredients: ['Gelato Passion', 'Gelato Mango', 'Pasta di Riso'], allergens: ['Latte'] },
+      { id: '5-mochi', name: '5 Mochi a Scelta', price: 15.50, desc: 'Gusti assortiti', ingredients: [], allergens: ['Latte', 'Frutta a guscio', 'Soia'] },
     ]
   }
 
@@ -394,6 +395,17 @@ const OrderPage = () => {
             </button>
           ))}
         </div>
+        
+        {/* Avviso allergeni */}
+        <div className="px-4 pb-2">
+          <button
+            onClick={() => setShowAllergenInfo(true)}
+            className="flex items-center gap-2 px-3 py-1.5 bg-amber-50 border border-amber-200 rounded-lg text-amber-700 text-xs"
+          >
+            <span>⚠️</span>
+            <span>Info allergeni e celiaci</span>
+          </button>
+        </div>
       </div>
 
       {/* Products */}
@@ -422,6 +434,13 @@ const OrderPage = () => {
                       {product.ingredients.length > 3 && (
                         <span className="text-xs text-gray-400">+{product.ingredients.length - 3}</span>
                       )}
+                    </div>
+                  )}
+                  {/* Allergeni */}
+                  {product.allergens && product.allergens.length > 0 && (
+                    <div className="flex items-center gap-1 mt-1 text-amber-600 text-xs">
+                      <span>⚠️</span>
+                      <span>{product.allergens.join(', ')}</span>
                     </div>
                   )}
                   <div className="flex items-center gap-2 mt-2">
@@ -847,6 +866,73 @@ const OrderPage = () => {
                   <Check size={20} />
                   Aggiungi €{(customizingSalad.price + (saladCrunchy ? 0.40 : 0) + (saladSauce ? 0.40 : 0)).toFixed(2)}
                 </button>
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* Modal Allergeni */}
+      <AnimatePresence>
+        {showAllergenInfo && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4"
+            onClick={() => setShowAllergenInfo(false)}
+          >
+            <motion.div
+              initial={{ scale: 0.9, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.9, opacity: 0 }}
+              onClick={e => e.stopPropagation()}
+              className="bg-white rounded-2xl max-w-lg w-full max-h-[80vh] overflow-y-auto"
+            >
+              <div className="sticky top-0 bg-amber-500 text-white p-4 rounded-t-2xl flex items-center justify-between">
+                <div className="flex items-center gap-2">
+                  <span className="text-xl">⚠️</span>
+                  <h2 className="font-bold text-lg">Allergeni e Intolleranze</h2>
+                </div>
+                <button onClick={() => setShowAllergenInfo(false)} className="p-1 hover:bg-amber-600 rounded-full">
+                  <X size={20} />
+                </button>
+              </div>
+              
+              <div className="p-4 space-y-4">
+                <div className="bg-amber-50 border border-amber-200 rounded-xl p-4">
+                  <h3 className="font-semibold text-amber-800 mb-2">ℹ️ Informazioni importanti</h3>
+                  <p className="text-amber-700 text-sm leading-relaxed">
+                    Tutti i nostri piatti possono contenere <strong>allergeni, additivi alimentari</strong> o sostanze 
+                    che potrebbero non essere adatte a persone con esigenze dietetiche specifiche.
+                  </p>
+                </div>
+
+                <div className="bg-red-50 border border-red-200 rounded-xl p-4">
+                  <h3 className="font-semibold text-red-800 mb-2">⚠️ Avviso per celiaci</h3>
+                  <p className="text-red-700 text-sm leading-relaxed">
+                    <strong>Attenzione:</strong> I nostri prodotti vengono preparati in una cucina dove si lavorano 
+                    anche ingredienti contenenti <strong>glutine</strong>. Nonostante le precauzioni adottate, 
+                    <strong> esiste sempre un rischio di contaminazione crociata</strong>.
+                  </p>
+                  <p className="text-red-700 text-sm mt-2">
+                    I prodotti indicati come "senza glutine" sono realizzati con ingredienti naturalmente privi di glutine, 
+                    ma non possiamo garantire l'assenza totale di tracce.
+                  </p>
+                </div>
+
+                <div className="bg-blue-50 border border-blue-200 rounded-xl p-4">
+                  <h3 className="font-semibold text-blue-800 mb-2">💡 Cosa fare?</h3>
+                  <ul className="text-blue-700 text-sm space-y-1">
+                    <li>• Segnala sempre le tue allergie al personale</li>
+                    <li>• Chiedi informazioni sugli ingredienti</li>
+                    <li>• In caso di dubbi, contattaci prima di ordinare</li>
+                  </ul>
+                </div>
+
+                <p className="text-gray-500 text-xs text-center">
+                  Per qualsiasi domanda, il nostro staff è a tua disposizione.
+                </p>
               </div>
             </motion.div>
           </motion.div>
