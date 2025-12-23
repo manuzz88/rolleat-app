@@ -110,6 +110,22 @@ const OrderPage = () => {
       { id: '5-mochi', name: '5 Mochi a Scelta', price: 15.50, desc: 'Gusti assortiti', ingredients: [], allergens: ['Latte', 'Frutta a guscio'] },
       { id: 'acai-bowl', name: 'Açaí Bowl ✨', price: 10.00, desc: 'Ciotola golosa a base gelato di açai', ingredients: ['Gelato Açaí', 'Banana', 'Fragola', 'Cereali', 'Müsli', 'Latte Condensato'], allergens: ['Glutine', 'Latte'] },
       { id: 'acai-short', name: 'Açaí Short ✨', price: 6.00, desc: 'Gelato a base di açai', ingredients: ['Gelato Açaí', 'Banana', 'Fragola', 'Cereali', 'Müsli', 'Latte Condensato'], allergens: ['Glutine', 'Latte'] },
+    ],
+    bevande: [
+      { id: 'acqua-naturale', name: 'Acqua Naturale', price: 1.50, desc: 'Brick 100% riciclabile', ingredients: [], allergens: [] },
+      { id: 'acqua-frizzante', name: 'Acqua Frizzante Sparea', price: 1.10, desc: '50cl', ingredients: [], allergens: [] },
+      { id: 'coca-cola', name: 'Coca Cola', price: 3.00, desc: 'Vetro 33cl', ingredients: [], allergens: [] },
+      { id: 'coca-cola-zero', name: 'Coca Cola Zero', price: 3.00, desc: 'Vetro 33cl', ingredients: [], allergens: [] },
+      { id: 'estathe-limone', name: 'Estathè Limone', price: 3.90, desc: 'Tè freddo al limone', ingredients: [], allergens: [] },
+      { id: 'estathe-pesca', name: 'Estathè Pesca', price: 3.90, desc: 'Tè freddo alla pesca', ingredients: [], allergens: [] },
+      { id: 'aranciata-plose', name: 'Aranciata BIO Plose', price: 3.50, desc: 'Bottiglia vetro 257ml', ingredients: [], allergens: [] },
+      { id: 'chinotto-plose', name: 'Chinotto BIO Plose', price: 3.50, desc: 'Bottiglia vetro 275ml', ingredients: [], allergens: [] },
+      { id: 'gazzosa-plose', name: 'Gazzosa BIO Plose', price: 3.50, desc: 'Bottiglia vetro 275ml', ingredients: [], allergens: [] },
+      { id: 'birra-oasi', name: "Birra L'Oasi 🍺", price: 5.00, desc: 'Fruit IPA - pompelmo rosa', ingredients: [], allergens: ['Glutine'] },
+      { id: 'birra-bianchina', name: 'Birra La Bianchina 🍺', price: 5.00, desc: 'Blanche belga - coriandolo e arancia', ingredients: [], allergens: ['Glutine'] },
+      { id: 'birra-mepiass', name: 'Birra Mè Piàss 🍺', price: 5.00, desc: 'Mexican Lager con fresh lime', ingredients: [], allergens: ['Glutine'] },
+      { id: 'birra-ambrada', name: "Birra L'Ambrada 🍺", price: 5.00, desc: 'Amber Ale SENZA GLUTINE', ingredients: [], allergens: [] },
+      { id: 'bubble-tea', name: 'Bubble Tea 🧋', price: 5.90, desc: 'Personalizzabile con perle di tapioca', ingredients: [], allergens: ['Latte'] },
     ]
   }
 
@@ -119,6 +135,7 @@ const OrderPage = () => {
     { id: 'insalate', label: '🥬 Insalate', emoji: '🥬' },
     { id: 'snack', label: '🥟 Snack', emoji: '🥟' },
     { id: 'dolci', label: '🍨 Dolci', emoji: '🍨' },
+    { id: 'bevande', label: '🥤 Bevande', emoji: '🥤' },
   ]
 
   // Apre il modal di personalizzazione
