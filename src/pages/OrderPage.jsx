@@ -106,8 +106,10 @@ const OrderPage = () => {
       { id: 'mochi-lampone', name: 'Mochi Lampone', price: 2.80, desc: 'Senza glutine', ingredients: ['Gelato Lampone', 'Pasta di Riso'], allergens: [] },
       { id: 'mochi-pistacchio', name: 'Mochi Pistacchio e Miele', price: 2.80, desc: 'Senza glutine', ingredients: ['Gelato Pistacchio', 'Miele', 'Pasta di Riso'], allergens: ['Latte', 'Frutta a guscio'] },
       { id: 'mochi-vaniglia', name: 'Mochi Vaniglia', price: 2.80, desc: 'Senza glutine, vegetariano', ingredients: ['Gelato Vaniglia', 'Pasta di Riso'], allergens: ['Latte'] },
-      { id: 'mochi-passion-mango', name: 'Mochi Passion e Mango', price: 2.80, desc: 'Senza glutine', ingredients: ['Gelato Passion', 'Gelato Mango', 'Pasta di Riso'], allergens: ['Latte'] },
-      { id: '5-mochi', name: '5 Mochi a Scelta', price: 15.50, desc: 'Gusti assortiti', ingredients: [], allergens: ['Latte', 'Frutta a guscio', 'Soia'] },
+      { id: 'mochi-passion-mango', name: 'Mochi Passion e Mango', price: 2.80, desc: 'Senza glutine', ingredients: ['Gelato Passion', 'Gelato Mango', 'Pasta di Riso'], allergens: [] },
+      { id: '5-mochi', name: '5 Mochi a Scelta', price: 15.50, desc: 'Gusti assortiti', ingredients: [], allergens: ['Latte', 'Frutta a guscio'] },
+      { id: 'acai-bowl', name: 'Açaí Bowl ✨', price: 10.00, desc: 'Ciotola golosa a base gelato di açai', ingredients: ['Gelato Açaí', 'Banana', 'Fragola', 'Cereali', 'Müsli', 'Latte Condensato'], allergens: ['Glutine', 'Latte'] },
+      { id: 'acai-short', name: 'Açaí Short ✨', price: 6.00, desc: 'Gelato a base di açai', ingredients: ['Gelato Açaí', 'Banana', 'Fragola', 'Cereali', 'Müsli', 'Latte Condensato'], allergens: ['Glutine', 'Latte'] },
     ]
   }
 
@@ -379,37 +381,30 @@ const OrderPage = () => {
           </button>
         </div>
         
-        {/* Categories */}
-        <div className="flex gap-2 px-4 pb-3 overflow-x-auto">
-          {categories.map(cat => (
-            <button
-              key={cat.id}
-              onClick={() => setActiveCategory(cat.id)}
-              className={`px-4 py-2 rounded-full whitespace-nowrap font-medium transition-colors ${
-                activeCategory === cat.id
-                  ? 'bg-rolleat-pink text-white'
-                  : 'bg-gray-100 text-gray-600'
-              }`}
-            >
-              {cat.label}
-            </button>
-          ))}
-        </div>
-        
-        {/* Avviso allergeni */}
-        <div className="px-4 pb-2">
-          <button
-            onClick={() => setShowAllergenInfo(true)}
-            className="flex items-center gap-2 px-3 py-1.5 bg-amber-50 border border-amber-200 rounded-lg text-amber-700 text-xs"
-          >
-            <span>⚠️</span>
-            <span>Info allergeni e celiaci</span>
-          </button>
+        {/* Categories - full width scrollable */}
+        <div className="relative">
+          <div className="flex gap-2 px-4 pb-3 overflow-x-auto scrollbar-hide" style={{scrollbarWidth: 'none', msOverflowStyle: 'none'}}>
+            {categories.map(cat => (
+              <button
+                key={cat.id}
+                onClick={() => setActiveCategory(cat.id)}
+                className={`px-4 py-2 rounded-full whitespace-nowrap font-medium transition-colors ${
+                  activeCategory === cat.id
+                    ? 'bg-rolleat-pink text-white'
+                    : 'bg-gray-100 text-gray-600'
+                }`}
+              >
+                {cat.label}
+              </button>
+            ))}
+          </div>
+          {/* Scroll indicator */}
+          <div className="absolute right-0 top-0 bottom-3 w-8 bg-gradient-to-l from-white to-transparent pointer-events-none" />
         </div>
       </div>
 
       {/* Products */}
-      <div className="p-4 space-y-3">
+      <div className="p-4 pb-24 space-y-3">
         {menu[activeCategory]?.map(product => {
           const inCartCount = cart.filter(item => item.id === product.id).reduce((sum, item) => sum + item.quantity, 0)
           return (
@@ -473,22 +468,32 @@ const OrderPage = () => {
         })}
       </div>
 
-      {/* Cart Button */}
-      {cartCount > 0 && (
-        <motion.div
-          initial={{ y: 100 }}
-          animate={{ y: 0 }}
-          className="fixed bottom-0 left-0 right-0 p-4 bg-white border-t shadow-lg"
-        >
+      {/* Bottom Bar - sempre visibile */}
+      <div className="fixed bottom-0 left-0 right-0 p-4 bg-white border-t shadow-lg">
+        <div className="flex gap-2">
           <button
-            onClick={() => setShowCart(true)}
-            className="w-full py-4 bg-gradient-to-r from-rolleat-pink to-rolleat-red text-white rounded-xl font-bold flex items-center justify-center gap-3"
+            onClick={() => setShowAllergenInfo(true)}
+            className="px-4 py-4 bg-amber-100 border border-amber-300 text-amber-700 rounded-xl font-medium"
+            title="Info allergeni"
           >
-            <ShoppingCart size={20} />
-            Vai al carrello • €{total.toFixed(2)}
+            ⚠️
           </button>
-        </motion.div>
-      )}
+          {cartCount > 0 ? (
+            <button
+              onClick={() => setShowCart(true)}
+              className="flex-1 py-4 bg-gradient-to-r from-rolleat-pink to-rolleat-red text-white rounded-xl font-bold flex items-center justify-center gap-3"
+            >
+              <ShoppingCart size={20} />
+              Vai al carrello • €{total.toFixed(2)}
+            </button>
+          ) : (
+            <div className="flex-1 py-4 bg-gray-100 text-gray-500 rounded-xl font-medium flex items-center justify-center gap-2">
+              <ShoppingCart size={20} />
+              Carrello vuoto
+            </div>
+          )}
+        </div>
+      </div>
 
       {/* Cart Modal */}
       <AnimatePresence>
