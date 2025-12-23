@@ -20,6 +20,14 @@ const OrderPage = () => {
   // Stato per personalizzazione prodotto
   const [customizingProduct, setCustomizingProduct] = useState(null)
   const [removedIngredients, setRemovedIngredients] = useState([])
+  const [selectedWrap, setSelectedWrap] = useState(null)
+  
+  // Tipi di sfoglia per i roll
+  const wrapTypes = [
+    { id: 'alga-nori', name: 'Alga Nori', icon: '🌿' },
+    { id: 'soia', name: 'Sfoglia di Soia', icon: '🫘' },
+    { id: 'soia-sesamo', name: 'Sfoglia Soia + Sesamo', icon: '🫘' }
+  ]
   
   // Stato per personalizzazione insalate
   const [customizingSalad, setCustomizingSalad] = useState(null)
@@ -67,11 +75,11 @@ const OrderPage = () => {
   // Menu prodotti con ingredienti
   const menu = {
     roll: [
-      { id: 'hawaii', name: 'Roll Hawaii', price: 8.90, desc: 'Salmone, avocado, mango', ingredients: ['Salmone', 'Avocado', 'Mango', 'Riso', 'Alga Nori'] },
-      { id: 'tokyo', name: 'Roll Tokyo', price: 9.50, desc: 'Tonno, cetriolo, sesamo', ingredients: ['Tonno', 'Cetriolo', 'Sesamo', 'Riso', 'Alga Nori'] },
-      { id: 'california', name: 'Roll California', price: 8.50, desc: 'Surimi, avocado, cetriolo', ingredients: ['Surimi', 'Avocado', 'Cetriolo', 'Riso', 'Alga Nori'] },
-      { id: 'dragon', name: 'Roll Dragon', price: 10.90, desc: 'Gambero, avocado, salsa teriyaki', ingredients: ['Gambero', 'Avocado', 'Salsa Teriyaki', 'Riso', 'Alga Nori'] },
-      { id: 'veggie', name: 'Roll Veggie', price: 7.90, desc: 'Verdure miste, tofu', ingredients: ['Tofu', 'Carote', 'Cetriolo', 'Avocado', 'Riso', 'Alga Nori'] },
+      { id: 'hawaii', name: 'Roll Hawaii', price: 8.90, desc: 'Salmone, avocado, mango', wrap: 'alga-nori', ingredients: ['Salmone', 'Avocado', 'Mango'] },
+      { id: 'tokyo', name: 'Roll Tokyo', price: 9.50, desc: 'Tonno, cetriolo, sesamo', wrap: 'alga-nori', ingredients: ['Tonno', 'Cetriolo', 'Sesamo'] },
+      { id: 'california', name: 'Roll California', price: 8.50, desc: 'Surimi, avocado, cetriolo', wrap: 'alga-nori', ingredients: ['Surimi', 'Avocado', 'Cetriolo'] },
+      { id: 'dragon', name: 'Roll Dragon', price: 10.90, desc: 'Gambero, avocado, salsa teriyaki', wrap: 'soia', ingredients: ['Gambero', 'Avocado', 'Salsa Teriyaki'] },
+      { id: 'veggie', name: 'Roll Veggie', price: 7.90, desc: 'Verdure miste, tofu', wrap: 'soia', ingredients: ['Tofu', 'Carote', 'Cetriolo', 'Avocado'] },
     ],
     bowl: [
       { id: 'poke-salmon', name: 'Poke Salmone', price: 12.90, desc: 'Salmone, riso, edamame, avocado', ingredients: ['Salmone', 'Riso', 'Edamame', 'Avocado', 'Cipolla Rossa', 'Sesamo'] },
@@ -123,6 +131,8 @@ const OrderPage = () => {
     } else {
       setCustomizingProduct(product)
       setRemovedIngredients([])
+      // Per i roll, inizializza la sfoglia con quella di default del prodotto
+      setSelectedWrap(product.wrap || 'alga-nori')
     }
   }
   
@@ -182,16 +192,31 @@ const OrderPage = () => {
     }
 
     // Aggiungi modifiche se presenti
-    if (removedIngredients.length > 0) {
-      customizedProduct.customizations = {
-        removedIngredients: removedIngredients
+    const mods = []
+    const hasWrapChange = activeCategory === 'roll' && selectedWrap && selectedWrap !== customizingProduct.wrap
+    const hasRemovedIngredients = removedIngredients.length > 0
+    
+    if (hasWrapChange || hasRemovedIngredients) {
+      customizedProduct.customizations = {}
+      
+      if (hasWrapChange) {
+        customizedProduct.customizations.wrap = selectedWrap
+        const wrapName = wrapTypes.find(w => w.id === selectedWrap)?.name || selectedWrap
+        mods.push(`con ${wrapName}`)
       }
-      customizedProduct.displayName = `${customizingProduct.name} (senza ${removedIngredients.join(', ')})`
+      
+      if (hasRemovedIngredients) {
+        customizedProduct.customizations.removedIngredients = removedIngredients
+        mods.push(`senza ${removedIngredients.join(', ')}`)
+      }
+      
+      customizedProduct.displayName = `${customizingProduct.name} (${mods.join(', ')})`
     }
 
     setCart(prev => [...prev, customizedProduct])
     setCustomizingProduct(null)
     setRemovedIngredients([])
+    setSelectedWrap(null)
   }
 
   // Aggiunge prodotto senza personalizzazione (incrementa quantità se esiste)
@@ -565,40 +590,74 @@ const OrderPage = () => {
                 </button>
               </div>
 
-              {/* Ingredienti */}
-              <div className="p-4">
-                <h3 className="font-semibold text-gray-800 mb-3">
-                  Rimuovi ingredienti
-                </h3>
-                <p className="text-xs text-gray-500 mb-3">
-                  Tocca per rimuovere un ingrediente
-                </p>
-                
-                <div className="flex flex-wrap gap-2">
-                  {customizingProduct.ingredients?.map((ingredient) => {
-                    const isRemoved = removedIngredients.includes(ingredient)
-                    return (
-                      <button
-                        key={ingredient}
-                        onClick={() => toggleIngredient(ingredient)}
-                        className={`px-3 py-2 rounded-full text-sm font-medium transition-all ${
-                          isRemoved
-                            ? 'bg-red-100 text-red-600 line-through'
-                            : 'bg-green-50 text-green-700'
-                        }`}
-                      >
-                        {isRemoved ? '✕ ' : '✓ '}{ingredient}
-                      </button>
-                    )
-                  })}
+              <div className="p-4 space-y-6">
+                {/* Cambio sfoglia (solo roll) */}
+                {activeCategory === 'roll' && (
+                  <div>
+                    <h3 className="font-semibold text-gray-800 mb-2">🌯 Tipo di sfoglia</h3>
+                    <div className="grid grid-cols-1 gap-2">
+                      {wrapTypes.map(wrap => (
+                        <button
+                          key={wrap.id}
+                          onClick={() => setSelectedWrap(wrap.id)}
+                          className={`p-3 rounded-xl border-2 text-left flex items-center gap-3 ${
+                            selectedWrap === wrap.id
+                              ? 'border-rolleat-pink bg-pink-50'
+                              : 'border-gray-200'
+                          }`}
+                        >
+                          <span className="text-xl">{wrap.icon}</span>
+                          <div>
+                            <span className={selectedWrap === wrap.id ? 'text-rolleat-pink font-medium' : 'text-gray-700'}>
+                              {wrap.name}
+                            </span>
+                            {wrap.id === customizingProduct.wrap && (
+                              <span className="text-xs text-gray-400 ml-2">(originale)</span>
+                            )}
+                          </div>
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                )}
+
+                {/* Ingredienti */}
+                <div>
+                  <h3 className="font-semibold text-gray-800 mb-2">❌ Rimuovi ingredienti</h3>
+                  <p className="text-xs text-gray-500 mb-3">
+                    Tocca per rimuovere un ingrediente
+                  </p>
+                  
+                  <div className="flex flex-wrap gap-2">
+                    {customizingProduct.ingredients?.map((ingredient) => {
+                      const isRemoved = removedIngredients.includes(ingredient)
+                      return (
+                        <button
+                          key={ingredient}
+                          onClick={() => toggleIngredient(ingredient)}
+                          className={`px-3 py-2 rounded-full text-sm font-medium transition-all ${
+                            isRemoved
+                              ? 'bg-red-100 text-red-600 line-through'
+                              : 'bg-green-50 text-green-700'
+                          }`}
+                        >
+                          {isRemoved ? '✕ ' : '✓ '}{ingredient}
+                        </button>
+                      )
+                    })}
+                  </div>
                 </div>
 
                 {/* Riepilogo modifiche */}
-                {removedIngredients.length > 0 && (
-                  <div className="mt-4 p-3 bg-amber-50 rounded-xl">
-                    <p className="text-sm text-amber-800">
-                      <strong>Senza:</strong> {removedIngredients.join(', ')}
-                    </p>
+                {(removedIngredients.length > 0 || (selectedWrap && selectedWrap !== customizingProduct.wrap)) && (
+                  <div className="p-3 bg-amber-50 rounded-xl">
+                    <p className="text-sm text-amber-800 font-medium mb-1">Modifiche:</p>
+                    {selectedWrap && selectedWrap !== customizingProduct.wrap && (
+                      <p className="text-sm text-amber-700">• Sfoglia: {wrapTypes.find(w => w.id === selectedWrap)?.name}</p>
+                    )}
+                    {removedIngredients.length > 0 && (
+                      <p className="text-sm text-amber-700">• Senza: {removedIngredients.join(', ')}</p>
+                    )}
                   </div>
                 )}
               </div>
