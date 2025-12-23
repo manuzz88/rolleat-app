@@ -20,6 +20,49 @@ const OrderPage = () => {
   // Stato per personalizzazione prodotto
   const [customizingProduct, setCustomizingProduct] = useState(null)
   const [removedIngredients, setRemovedIngredients] = useState([])
+  
+  // Stato per personalizzazione insalate
+  const [customizingSalad, setCustomizingSalad] = useState(null)
+  const [saladBase, setSaladBase] = useState('misticanza')
+  const [saladCrunchy, setSaladCrunchy] = useState(null)
+  const [saladSauce, setSaladSauce] = useState(null)
+  const [saladCrostini, setSaladCrostini] = useState(false)
+  const [saladRemovedIngredients, setSaladRemovedIngredients] = useState([])
+
+  // Opzioni insalate
+  const saladBases = [
+    { id: 'misticanza', name: 'Misticanza' },
+    { id: 'spinacino', name: 'Spinacino' },
+    { id: 'rucola', name: 'Rucola' },
+    { id: 'mix-2', name: 'Mix di due' },
+    { id: 'mix-3', name: 'Mix di tutte' }
+  ]
+  
+  const crunchyExtras = [
+    { id: 'arachidi', name: 'Granella di arachidi', price: 0.40 },
+    { id: 'cipolla-croccante', name: 'Cipolla croccante', price: 0.40 },
+    { id: 'platano', name: 'Granella di platano', price: 0.40 },
+    { id: 'platano-spicy', name: 'Granella platano spicy', price: 0.40 },
+    { id: 'mandorle', name: 'Mandorle a fette', price: 0.40 },
+    { id: 'kataifi', name: 'Pasta kataifi', price: 0.40 }
+  ]
+  
+  const sauceExtras = [
+    { id: 'mayo-avocado', name: 'Maionese avocado', price: 0.40 },
+    { id: 'mayo-giapponese', name: 'Maionese giapponese', price: 0.40 },
+    { id: 'mayo-vegan', name: 'Maionese vegan', price: 0.40 },
+    { id: 'mayo-zenzero', name: 'Maionese zenzero', price: 0.40 },
+    { id: 'olio-oliva', name: 'Olio d\'oliva', price: 0.40 },
+    { id: 'pesto', name: 'Pesto di basilico', price: 0.40 },
+    { id: 'curry', name: 'Salsa curry', price: 0.40 },
+    { id: 'soia', name: 'Salsa di soia', price: 0.40 },
+    { id: 'piccante', name: 'Salsa piccante', price: 0.40 },
+    { id: 'teriyaki', name: 'Salsa teriyaki', price: 0.40 },
+    { id: 'wasabi', name: 'Wasabi', price: 0.40 },
+    { id: 'ponzu', name: 'Salsa ponzu', price: 0.40 },
+    { id: 'yogurt', name: 'Salsa yogurt', price: 0.40 },
+    { id: 'mayo-spicy', name: 'Maionese spicy', price: 0.40 }
+  ]
 
   // Menu prodotti con ingredienti
   const menu = {
@@ -56,8 +99,54 @@ const OrderPage = () => {
 
   // Apre il modal di personalizzazione
   const openCustomizer = (product) => {
-    setCustomizingProduct(product)
-    setRemovedIngredients([])
+    // Se è un'insalata, usa il customizer dedicato
+    if (activeCategory === 'insalate') {
+      setCustomizingSalad(product)
+      setSaladBase('misticanza')
+      setSaladCrunchy(null)
+      setSaladSauce(null)
+      setSaladCrostini(false)
+      setSaladRemovedIngredients([])
+    } else {
+      setCustomizingProduct(product)
+      setRemovedIngredients([])
+    }
+  }
+  
+  // Conferma insalata personalizzata
+  const confirmSaladCustomization = () => {
+    if (!customizingSalad) return
+    
+    const extraPrice = (saladCrunchy ? 0.40 : 0) + (saladSauce ? 0.40 : 0)
+    const totalPrice = customizingSalad.price + extraPrice
+    
+    const customizedProduct = {
+      ...customizingSalad,
+      cartId: `${customizingSalad.id}-${Date.now()}`,
+      price: totalPrice,
+      quantity: 1,
+      customizations: {
+        base: saladBase,
+        crunchy: saladCrunchy,
+        sauce: saladSauce,
+        crostini: saladCrostini,
+        removedIngredients: saladRemovedIngredients.length > 0 ? saladRemovedIngredients : null
+      }
+    }
+    
+    // Genera nome personalizzato
+    const mods = []
+    const baseName = saladBases.find(b => b.id === saladBase)?.name || saladBase
+    mods.push(`base ${baseName}`)
+    if (saladCrunchy) mods.push(`+ ${crunchyExtras.find(c => c.id === saladCrunchy)?.name}`)
+    if (saladSauce) mods.push(`+ ${sauceExtras.find(s => s.id === saladSauce)?.name}`)
+    if (saladCrostini) mods.push('+ crostini')
+    if (saladRemovedIngredients.length > 0) mods.push(`senza ${saladRemovedIngredients.join(', ')}`)
+    
+    customizedProduct.displayName = `${customizingSalad.name} (${mods.join(', ')})`
+    
+    setCart(prev => [...prev, customizedProduct])
+    setCustomizingSalad(null)
   }
 
   // Toggle ingrediente rimosso
@@ -515,6 +604,176 @@ const OrderPage = () => {
                 >
                   <Check size={20} />
                   Aggiungi
+                </button>
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* Modal Personalizzazione Insalata */}
+      <AnimatePresence>
+        {customizingSalad && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 bg-black/60 z-50 flex items-end"
+            onClick={() => setCustomizingSalad(null)}
+          >
+            <motion.div
+              initial={{ y: '100%' }}
+              animate={{ y: 0 }}
+              exit={{ y: '100%' }}
+              onClick={e => e.stopPropagation()}
+              className="w-full bg-white rounded-t-3xl max-h-[90vh] overflow-y-auto"
+            >
+              {/* Header */}
+              <div className="sticky top-0 bg-green-600 text-white p-4 flex items-center justify-between">
+                <div>
+                  <h2 className="text-lg font-bold">{customizingSalad.name}</h2>
+                  <p className="text-sm text-white/80">Personalizza la tua insalata</p>
+                </div>
+                <button 
+                  onClick={() => setCustomizingSalad(null)}
+                  className="p-2 bg-white/20 rounded-full"
+                >
+                  <X size={20} />
+                </button>
+              </div>
+
+              <div className="p-4 space-y-6">
+                {/* Scelta Base */}
+                <div>
+                  <h3 className="font-semibold text-gray-800 mb-2">🥬 Scegli la base</h3>
+                  <div className="grid grid-cols-2 gap-2">
+                    {saladBases.map(base => (
+                      <button
+                        key={base.id}
+                        onClick={() => setSaladBase(base.id)}
+                        className={`p-3 rounded-xl border-2 text-left ${
+                          saladBase === base.id
+                            ? 'border-green-500 bg-green-50'
+                            : 'border-gray-200'
+                        }`}
+                      >
+                        <span className={saladBase === base.id ? 'text-green-700 font-medium' : 'text-gray-700'}>
+                          {base.name}
+                        </span>
+                      </button>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Crostini */}
+                <button
+                  onClick={() => setSaladCrostini(!saladCrostini)}
+                  className={`w-full p-3 rounded-xl border-2 flex items-center justify-between ${
+                    saladCrostini ? 'border-amber-500 bg-amber-50' : 'border-gray-200'
+                  }`}
+                >
+                  <span className={saladCrostini ? 'text-amber-700 font-medium' : 'text-gray-700'}>
+                    🍞 Crostini di pane
+                  </span>
+                  {saladCrostini && <Check size={20} className="text-amber-600" />}
+                </button>
+
+                {/* Crunchy Extra */}
+                <div>
+                  <h3 className="font-semibold text-gray-800 mb-1">🥜 Crunchy extra</h3>
+                  <p className="text-xs text-gray-500 mb-2">Max 1 (+€0.40)</p>
+                  <div className="space-y-2">
+                    <button
+                      onClick={() => setSaladCrunchy(null)}
+                      className={`w-full p-2 rounded-lg border text-left text-sm ${
+                        !saladCrunchy ? 'border-gray-400 bg-gray-50' : 'border-gray-200'
+                      }`}
+                    >
+                      Nessuno
+                    </button>
+                    {crunchyExtras.map(item => (
+                      <button
+                        key={item.id}
+                        onClick={() => setSaladCrunchy(item.id)}
+                        className={`w-full p-2 rounded-lg border text-left text-sm flex justify-between ${
+                          saladCrunchy === item.id ? 'border-orange-500 bg-orange-50' : 'border-gray-200'
+                        }`}
+                      >
+                        <span>{item.name}</span>
+                        <span className="text-orange-600">+€0.40</span>
+                      </button>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Salsa Extra */}
+                <div>
+                  <h3 className="font-semibold text-gray-800 mb-1">🥣 Salsa extra</h3>
+                  <p className="text-xs text-gray-500 mb-2">Max 1 (+€0.40)</p>
+                  <div className="space-y-2 max-h-40 overflow-y-auto">
+                    <button
+                      onClick={() => setSaladSauce(null)}
+                      className={`w-full p-2 rounded-lg border text-left text-sm ${
+                        !saladSauce ? 'border-gray-400 bg-gray-50' : 'border-gray-200'
+                      }`}
+                    >
+                      Nessuna
+                    </button>
+                    {sauceExtras.map(item => (
+                      <button
+                        key={item.id}
+                        onClick={() => setSaladSauce(item.id)}
+                        className={`w-full p-2 rounded-lg border text-left text-sm flex justify-between ${
+                          saladSauce === item.id ? 'border-purple-500 bg-purple-50' : 'border-gray-200'
+                        }`}
+                      >
+                        <span>{item.name}</span>
+                        <span className="text-purple-600">+€0.40</span>
+                      </button>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Rimuovi ingredienti */}
+                {customizingSalad.ingredients && (
+                  <div>
+                    <h3 className="font-semibold text-gray-800 mb-2">❌ Rimuovi ingredienti</h3>
+                    <div className="flex flex-wrap gap-2">
+                      {customizingSalad.ingredients.map(ing => {
+                        const isRemoved = saladRemovedIngredients.includes(ing)
+                        return (
+                          <button
+                            key={ing}
+                            onClick={() => setSaladRemovedIngredients(prev => 
+                              prev.includes(ing) ? prev.filter(i => i !== ing) : [...prev, ing]
+                            )}
+                            className={`px-3 py-1.5 rounded-full text-sm ${
+                              isRemoved ? 'bg-red-100 text-red-600 line-through' : 'bg-green-50 text-green-700'
+                            }`}
+                          >
+                            {isRemoved ? '✕ ' : '✓ '}{ing}
+                          </button>
+                        )
+                      })}
+                    </div>
+                  </div>
+                )}
+              </div>
+
+              {/* Footer */}
+              <div className="sticky bottom-0 bg-white border-t p-4 flex gap-3">
+                <button
+                  onClick={() => setCustomizingSalad(null)}
+                  className="flex-1 py-3 border-2 border-gray-200 text-gray-600 rounded-xl font-medium"
+                >
+                  Annulla
+                </button>
+                <button
+                  onClick={confirmSaladCustomization}
+                  className="flex-1 py-3 bg-gradient-to-r from-green-500 to-green-600 text-white rounded-xl font-semibold flex items-center justify-center gap-2"
+                >
+                  <Check size={20} />
+                  Aggiungi €{(customizingSalad.price + (saladCrunchy ? 0.40 : 0) + (saladSauce ? 0.40 : 0)).toFixed(2)}
                 </button>
               </div>
             </motion.div>
