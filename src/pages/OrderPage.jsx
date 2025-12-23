@@ -932,7 +932,7 @@ const OrderPage = () => {
 
                 {/* Link tabella allergeni completa */}
                 <a
-                  href="https://rolleat-kiosk.netlify.app/tabella-allergeni.html"
+                  href="https://rolleat-kiosk-api-4ln9t.ondigitalocean.app/tabella-allergeni.html"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="block w-full py-3 bg-gradient-to-r from-pink-500 to-red-500 text-white text-center rounded-xl font-semibold"
