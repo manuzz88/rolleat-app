@@ -36,12 +36,10 @@ const OrderPage = () => {
       { id: 'buddha', name: 'Buddha Bowl', price: 11.90, desc: 'Quinoa, verdure, hummus', ingredients: ['Quinoa', 'Ceci', 'Hummus', 'Pomodorini', 'Cetriolo', 'Carote'] },
     ],
     insalate: [
-      { id: 'green', name: 'Green Salad', price: 9.90, desc: 'Mix verde, avocado, semi', ingredients: ['Mix Insalata', 'Avocado', 'Semi di Zucca', 'Cetriolo', 'Olio EVO'] },
-      { id: 'protein', name: 'Protein Salad', price: 11.90, desc: 'Pollo, uova, verdure', ingredients: ['Pollo Grigliato', 'Uova Sode', 'Pomodorini', 'Lattuga', 'Carote', 'Mais'] },
-      { id: 'caesar', name: 'Caesar Salad', price: 10.90, desc: 'Lattuga, pollo, parmigiano, crostini', ingredients: ['Lattuga Romana', 'Pollo Grigliato', 'Parmigiano', 'Crostini', 'Salsa Caesar'] },
-      { id: 'tonno', name: 'Insalata Tonno', price: 10.50, desc: 'Tonno, fagioli, cipolla', ingredients: ['Tonno', 'Fagioli', 'Cipolla Rossa', 'Pomodorini', 'Lattuga', 'Olive'] },
-      { id: 'greca', name: 'Insalata Greca', price: 9.50, desc: 'Feta, olive, cetriolo', ingredients: ['Feta', 'Olive Nere', 'Cetriolo', 'Pomodori', 'Cipolla Rossa', 'Origano'] },
-      { id: 'quinoa-salad', name: 'Quinoa Salad', price: 11.50, desc: 'Quinoa, verdure, feta', ingredients: ['Quinoa', 'Feta', 'Pomodorini', 'Cetriolo', 'Menta', 'Limone'] },
+      { id: 'in-grecia', name: 'Insalata In Grecia', price: 10.90, desc: 'Pomodorini, Feta, Olive, Cetrioli, Cipolla', ingredients: ['Pomodorini', 'Feta', 'Olive Taggiasche', 'Cetrioli', 'Cipolla di Tropea', 'Olio d\'oliva'] },
+      { id: 'veggy-nuggets', name: 'Veggy Nuggets & Co', price: 10.90, desc: 'Veggy nuggets, Edamame, Olive, Carote', ingredients: ['Veggy Nuggets', 'Edamame', 'Olive Taggiasche', 'Carote', 'Salsa Teriyaki'] },
+      { id: 'mediterranea', name: 'Insalata Mediterranea', price: 10.90, desc: 'Uova, Mozzarelline, Pomodorini, Olive', ingredients: ['Uova Bollite', 'Mozzarelline', 'Pomodorini', 'Olive Taggiasche', 'Olio d\'oliva'] },
+      { id: 'caesar', name: 'Caesar Salad', price: 10.90, desc: 'Pollo teriyaki, Feta, Pomodori secchi', ingredients: ['Pollo Teriyaki & Zenzero', 'Feta', 'Pomodori Secchi', 'Olive Taggiasche', 'Salsa Caesar'] },
     ],
     snack: [
       { id: 'edamame', name: 'Edamame', price: 4.50, desc: 'Con sale marino', ingredients: ['Edamame', 'Sale Marino'] },
