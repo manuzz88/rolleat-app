@@ -87,6 +87,18 @@ const OrderPage = () => {
     snack: [
       { id: 'edamame', name: 'Edamame', price: 4.50, desc: 'Con sale marino', ingredients: ['Edamame', 'Sale Marino'] },
       { id: 'gyoza', name: 'Gyoza (5pz)', price: 6.90, desc: 'Ravioli giapponesi', ingredients: ['Maiale', 'Verdure', 'Pasta Gyoza'] },
+    ],
+    dolci: [
+      { id: 'mochi-cioccolato-nocciole', name: 'Mochi Cioccolato e Nocciole', price: 2.80, desc: 'Vegano, senza glutine', ingredients: ['Gelato Cioccolato', 'Nocciole', 'Pasta di Riso'] },
+      { id: 'mochi-cocco', name: 'Mochi Cocco', price: 2.80, desc: 'Senza glutine, vegetariano', ingredients: ['Gelato Cocco', 'Cocco Essiccato', 'Pasta di Riso'] },
+      { id: 'mochi-cioccolato-belga', name: 'Mochi Cioccolato Belga', price: 2.80, desc: 'Vegano, senza glutine', ingredients: ['Gelato Cioccolato Belga', 'Cacao', 'Pasta di Riso'] },
+      { id: 'mochi-fragola-panna', name: 'Mochi Fragola e Panna', price: 2.80, desc: 'Senza glutine', ingredients: ['Gelato Fragola', 'Panna', 'Pasta di Riso'] },
+      { id: 'mochi-mango', name: 'Mochi Mango Alphonso', price: 2.80, desc: 'Senza glutine', ingredients: ['Gelato Mango', 'Pasta di Riso'] },
+      { id: 'mochi-lampone', name: 'Mochi Lampone', price: 2.80, desc: 'Senza glutine', ingredients: ['Gelato Lampone', 'Pasta di Riso'] },
+      { id: 'mochi-pistacchio', name: 'Mochi Pistacchio e Miele', price: 2.80, desc: 'Senza glutine', ingredients: ['Gelato Pistacchio', 'Miele', 'Pasta di Riso'] },
+      { id: 'mochi-vaniglia', name: 'Mochi Vaniglia', price: 2.80, desc: 'Senza glutine, vegetariano', ingredients: ['Gelato Vaniglia', 'Pasta di Riso'] },
+      { id: 'mochi-passion-mango', name: 'Mochi Passion e Mango', price: 2.80, desc: 'Senza glutine', ingredients: ['Gelato Passion', 'Gelato Mango', 'Pasta di Riso'] },
+      { id: '5-mochi', name: '5 Mochi a Scelta', price: 15.50, desc: 'Gusti assortiti', ingredients: [] },
     ]
   }
 
@@ -95,6 +107,7 @@ const OrderPage = () => {
     { id: 'bowl', label: '🥗 Bowl', emoji: '🥗' },
     { id: 'insalate', label: '🥬 Insalate', emoji: '🥬' },
     { id: 'snack', label: '🥟 Snack', emoji: '🥟' },
+    { id: 'dolci', label: '🍨 Dolci', emoji: '🍨' },
   ]
 
   // Apre il modal di personalizzazione
