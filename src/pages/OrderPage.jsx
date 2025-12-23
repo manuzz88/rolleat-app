@@ -36,8 +36,12 @@ const OrderPage = () => {
       { id: 'buddha', name: 'Buddha Bowl', price: 11.90, desc: 'Quinoa, verdure, hummus', ingredients: ['Quinoa', 'Ceci', 'Hummus', 'Pomodorini', 'Cetriolo', 'Carote'] },
     ],
     insalate: [
-      { id: 'green', name: 'Green Salad', price: 9.90, desc: 'Mix verde, avocado, semi', ingredients: ['Mix Insalata', 'Avocado', 'Semi di Zucca', 'Olio EVO'] },
-      { id: 'protein', name: 'Protein Salad', price: 11.90, desc: 'Pollo, uova, verdure', ingredients: ['Pollo Grigliato', 'Uova', 'Pomodorini', 'Lattuga', 'Carote'] },
+      { id: 'green', name: 'Green Salad', price: 9.90, desc: 'Mix verde, avocado, semi', ingredients: ['Mix Insalata', 'Avocado', 'Semi di Zucca', 'Cetriolo', 'Olio EVO'] },
+      { id: 'protein', name: 'Protein Salad', price: 11.90, desc: 'Pollo, uova, verdure', ingredients: ['Pollo Grigliato', 'Uova Sode', 'Pomodorini', 'Lattuga', 'Carote', 'Mais'] },
+      { id: 'caesar', name: 'Caesar Salad', price: 10.90, desc: 'Lattuga, pollo, parmigiano, crostini', ingredients: ['Lattuga Romana', 'Pollo Grigliato', 'Parmigiano', 'Crostini', 'Salsa Caesar'] },
+      { id: 'tonno', name: 'Insalata Tonno', price: 10.50, desc: 'Tonno, fagioli, cipolla', ingredients: ['Tonno', 'Fagioli', 'Cipolla Rossa', 'Pomodorini', 'Lattuga', 'Olive'] },
+      { id: 'greca', name: 'Insalata Greca', price: 9.50, desc: 'Feta, olive, cetriolo', ingredients: ['Feta', 'Olive Nere', 'Cetriolo', 'Pomodori', 'Cipolla Rossa', 'Origano'] },
+      { id: 'quinoa-salad', name: 'Quinoa Salad', price: 11.50, desc: 'Quinoa, verdure, feta', ingredients: ['Quinoa', 'Feta', 'Pomodorini', 'Cetriolo', 'Menta', 'Limone'] },
     ],
     snack: [
       { id: 'edamame', name: 'Edamame', price: 4.50, desc: 'Con sale marino', ingredients: ['Edamame', 'Sale Marino'] },
