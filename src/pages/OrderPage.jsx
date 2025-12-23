@@ -418,24 +418,32 @@ const OrderPage = () => {
                 <div className="flex-1" onClick={() => openCustomizer(product)}>
                   <h3 className="font-semibold text-gray-800">{product.name}</h3>
                   <p className="text-sm text-gray-500">{product.desc}</p>
-                  {/* Ingredienti */}
+                  {/* Ingredienti - mostra tutti */}
                   {product.ingredients && (
                     <div className="flex flex-wrap gap-1 mt-2">
-                      {product.ingredients.slice(0, 3).map((ing, i) => (
+                      {product.ingredients.map((ing, i) => (
                         <span key={i} className="text-xs bg-gray-100 text-gray-600 px-2 py-0.5 rounded-full">
                           {ing}
                         </span>
                       ))}
-                      {product.ingredients.length > 3 && (
-                        <span className="text-xs text-gray-400">+{product.ingredients.length - 3}</span>
-                      )}
                     </div>
                   )}
-                  {/* Allergeni */}
+                  {/* Allergeni - icone piccole */}
                   {product.allergens && product.allergens.length > 0 && (
-                    <div className="flex items-center gap-1 mt-1 text-amber-600 text-xs">
-                      <span>⚠️</span>
-                      <span>{product.allergens.join(', ')}</span>
+                    <div className="flex items-center gap-0.5 mt-1 text-xs">
+                      {product.allergens.slice(0, 5).map((a, i) => (
+                        <span key={i} title={a} className="cursor-help">
+                          {a === 'Glutine' && '🌾'}
+                          {a === 'Pesce' && '🐟'}
+                          {a === 'Latte' && '🥛'}
+                          {a === 'Soia' && '🌱'}
+                          {a === 'Sesamo' && '⚪'}
+                          {a === 'Uova' && '🥚'}
+                          {a === 'Crostacei' && '🦐'}
+                          {a === 'Frutta a guscio' && '🌰'}
+                        </span>
+                      ))}
+                      {product.allergens.length > 5 && <span className="text-gray-400">+{product.allergens.length - 5}</span>}
                     </div>
                   )}
                   <div className="flex items-center gap-2 mt-2">
